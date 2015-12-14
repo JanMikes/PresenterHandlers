@@ -1,0 +1,21 @@
+{
+	"name": "lexinek/presenter-handlers",
+	"require": {
+		"lexinek/doctrine-behaviors": "*",
+		"kdyby/doctrine": "*",
+		"nette/application": "^2.3",
+		"nette/utils": "^2.3",
+		"php": ">=5.4.0"
+	},
+	"authors": [
+		{
+			"name": "Jan Mikes",
+			"email": "j.mikes@me.com",
+			"homepage": "http://janmikes.cz"
+		}
+	],
+	"minimum-stability": "dev",
+	"autoload": {
+		"classmap": ["src/"]
+	}
+}
