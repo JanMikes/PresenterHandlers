@@ -20,7 +20,7 @@ trait ManageActions
 
 	public function renderDefault()
 	{
-		if ($this instanceof IOrderable) {
+		if ($this instanceof Orderable\IOrderable) {
 			$this->orderBy["position"] = "ASC";
 		}
 
