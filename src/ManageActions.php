@@ -17,6 +17,15 @@ trait ManageActions
 	/** @var array */
 	private $orderBy = [];
 
+	/** @var string */
+	private $presenterHandlerTemplates = "PresenterHandlers";
+
+	/** @var string */
+	private $addViewTitle;
+
+	/** @var string */
+	private $editViewTitle;
+
 
 	public function renderDefault()
 	{
@@ -37,6 +46,8 @@ trait ManageActions
 		$entityName = $this->getEntityClassName();
 		$this->entity = new $entityName;
 
+		$this->template->viewTitle = $this->addViewTitle;
+
 		if ($this->isAjax()) {
 			$this->payload->isModal = TRUE;
 			$this->redrawControl("modal");
@@ -50,6 +61,7 @@ trait ManageActions
 			$this->redirect("default");
 		}
 
+		$this->template->viewTitle = $this->editViewTitle;
 		$this["manageForm"]->setDefaults($this->entity->toArray());
 
 		if ($this->isAjax()) {
@@ -59,5 +71,37 @@ trait ManageActions
 	}
 
 
-	abstract protected function createComponentManageForm($factory);
+	public function formatTemplateFiles()
+	{
+		$dir = dirname($this->getReflection()->getFileName());
+ 		$dir = is_dir("$dir/templates") ? $dir : dirname($dir);
+ 		
+		$templates = parent::formatTemplateFiles();
+		$templates[] = "$dir/templates/$this->presenterHandlerTemplates/$this->view.latte";
+		$templates[] = "$dir/templates/$this->presenterHandlerTemplates.$this->view.latte";
+
+		return $templates;
+	}
+
+
+	public function getEntityClassName()
+	{
+		$name = $this->getName();
+ 		$presenter = substr($name, strrpos(':' . $name, ':'));
+		return "App\\Model\\Entities\\$presenter";
+	}
+
+
+	protected function createComponentManageForm()
+	{
+		$name = $this->getName();
+ 		$presenter = substr($name, strrpos(':' . $name, ':'));
+
+		$factory = $this->context->getByType("App\\Manage" . $presenter . "Form\\FormFactory");
+
+		return $factory->create($this->entity, function($form) {
+			$form->presenter->flashMessage("Vaše data byla úspěšně uložena", "success");
+			$form->presenter->redirect("default");
+		});
+	}
 }
