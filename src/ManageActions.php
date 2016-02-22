@@ -92,7 +92,7 @@ trait ManageActions
 	}
 
 
-	protected function createComponentManageForm()
+	public function createComponentManageForm()
 	{
 		$name = $this->getName();
  		$presenter = substr($name, strrpos(':' . $name, ':'));
