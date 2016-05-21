@@ -8,23 +8,26 @@ namespace Lexinek\PresenterHandlers;
  */
 trait ManageActions
 {
-	/** @var App\Model\Entities\BaseEntity */
-	private $entity;
+	/** @var array */
+	protected $findBy = [];
 
 	/** @var array */
-	private $findBy = [];
+	protected $orderBy = [];
 
-	/** @var array */
-	private $orderBy = [];
+	/** @var string */
+	protected $editViewTitle;
+
+	/** @var string */
+	protected $addViewTitle;
 
 	/** @var string */
 	private $presenterHandlerTemplates = "PresenterHandlers";
 
-	/** @var string */
-	private $addViewTitle;
+	/** @var \App\Model\Entities\BaseEntity */
+	private $entity;
 
-	/** @var string */
-	private $editViewTitle;
+	// @TODO allow ordering by translations: http://stackoverflow.com/questions/18042423/knplabs-translatable-how-to-find-an-entry-by-a-translatable-field
+	// etc for CategoryPresenter
 
 
 	public function renderDefault()
@@ -92,7 +95,7 @@ trait ManageActions
 	}
 
 
-	public function createComponentManageForm()
+	protected function createComponentManageForm()
 	{
 		$name = $this->getName();
  		$presenter = substr($name, strrpos(':' . $name, ':'));
@@ -103,5 +106,13 @@ trait ManageActions
 			$form->presenter->flashMessage("Vaše data byla úspěšně uložena", "success");
 			$form->presenter->redirect("default");
 		});
+	}
+
+
+	protected function beforeRender()
+	{
+		parent::beforeRender();
+
+		$this->template->entity = $this->entity;
 	}
 }
