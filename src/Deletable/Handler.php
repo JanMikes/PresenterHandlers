@@ -15,6 +15,8 @@ trait Handler
 			$this->em->flush();
 		}
 
+		$this->handleCleanCache();
+
 		if (!$this->isAjax()) {
 			$this->redirect("this");
 		}

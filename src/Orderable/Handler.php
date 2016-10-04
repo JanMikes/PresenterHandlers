@@ -11,5 +11,6 @@ trait Handler
 	public function handleReorder()
 	{
 		$this->updateOrderablePositions($this->getEntityClassName());
+		$this->handleCleanCache();
 	}
 }

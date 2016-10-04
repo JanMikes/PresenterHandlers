@@ -14,6 +14,8 @@ trait Handler
 			$this->em->flush($entity->deactivate());
 		}
 
+		$this->handleCleanCache();
+
 		if (!$this->isAjax()) {
 			$this->redirect("this");
 		}
@@ -24,6 +26,8 @@ trait Handler
 		if ($id && ($entity = $this->em->find($this->getEntityClassName(), $id))) {
 			$this->em->flush($entity->activate());
 		}
+
+		$this->handleCleanCache();
 
 		if (!$this->isAjax()) {
 			$this->redirect("this");
